@@ -46,7 +46,6 @@ export const startSignIn = (credentials = {}) => async (dispatch) => {
     dispatch(signIn(user));
   } catch (e) {
     const { response } = e;
-    console.log('here');
 
     if (response) dispatch(setError(response.data));
     else dispatch(setError('Error occured'));

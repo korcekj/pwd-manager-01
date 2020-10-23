@@ -22,7 +22,7 @@ router.post('/signup', async (req, res) => {
     return res
       .cookie('token', token, {
         expires: new Date(Date.now() + process.env.JWT_SECRET_EXPIRATION),
-        secure: false,
+        secure: true,
         httpOnly: true,
       })
       .send();
@@ -59,12 +59,11 @@ router.post('/signin', async (req, res) => {
     return res
       .cookie('token', token, {
         expires: new Date(Date.now() + process.env.JWT_SECRET_EXPIRATION),
-        secure: false,
+        secure: true,
         httpOnly: true,
       })
       .send();
   } catch (error) {
-    console.log(error);
     return res.status(422).send('Invalid email or password');
   }
 });
