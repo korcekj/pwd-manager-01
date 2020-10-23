@@ -43,7 +43,8 @@ const authRoutes = require('./routes/authRoutes');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors({ origin: true, credentials: true }));
+// app.use(cors({ origin: true, credentials: true }));
+app.use(cors());
 app.use(cookieParser());
 app.use('/auth', authRoutes);
 
