@@ -21,8 +21,8 @@ router.post('/signup', async (req, res) => {
     const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET);
     return res
       .cookie('token', token, {
-        expires: new Date(Date.now() + process.env.JWT_SECRET_EXPIRATION),
-        secure: false,
+        expires: new Date(Date.now() + Number(process.env.JWT_SECRET_MAX_AGE)),
+        secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
       })
       .send();
@@ -58,8 +58,8 @@ router.post('/signin', async (req, res) => {
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
     return res
       .cookie('token', token, {
-        expires: new Date(Date.now() + process.env.JWT_SECRET_EXPIRATION),
-        secure: false,
+        expires: new Date(Date.now() + Number(process.env.JWT_SECRET_MAX_AGE)),
+        secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
       })
       .send();
