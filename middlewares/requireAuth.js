@@ -5,10 +5,11 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
 module.exports = (req, res, next) => {
-  const { token } = req.cookies;
+  const { authorization } = req.headers;
 
-  if (!token) return res.status(401).send('Authentification failed');
+  if (!authorization) return res.status(401).send('Authentification failed');
 
+  const token = authorization.replace('Bearer ', '');
   jwt.verify(token, process.env.JWT_SECRET, async (error, payload) => {
     if (error) return res.status(401).send('Authentification failed');
 

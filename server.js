@@ -6,7 +6,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 const path = require('path');
 const compression = require('compression');
 const enforce = require('express-sslify');
@@ -44,7 +43,6 @@ const authRoutes = require('./routes/authRoutes');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ origin: true, credentials: true }));
-app.use(cookieParser());
 app.use('/auth', authRoutes);
 
 // V pripade ze sa jedna o production, tak sa nastavuju jednotlive sluzby, kvoli optimalizacii a bezpecnosti servera

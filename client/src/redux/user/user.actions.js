@@ -1,5 +1,5 @@
 import { userActionTypes } from './user.types';
-import axios from 'axios';
+import authApi from '../../api/auth';
 
 export const signIn = (user = {}) => ({
   type: userActionTypes.SIGN_IN,
@@ -26,21 +26,7 @@ export const clearError = () => ({
 
 export const trySignIn = () => async (dispatch) => {
   try {
-    const user = await axios.get('/auth/me', {
-      withCredentials: true,
-    });
-    if (user) dispatch(signIn(user));
-  } catch (e) {
-    const { response } = e;
-
-    if (response) dispatch(setError(response.data));
-    else dispatch(setError('Error occured'));
-  }
-};
-
-export const startSignIn = (credentials = {}) => async (dispatch) => {
-  try {
-    const user = await axios.post('/auth/signin', credentials, {
+    const { data: user } = await authApi.get('/auth/me', {
       withCredentials: true,
     });
     dispatch(signIn(user));
@@ -52,13 +38,32 @@ export const startSignIn = (credentials = {}) => async (dispatch) => {
   }
 };
 
-export const startSignUp = (userData = {}) => async (dispatch) => {
+export const startSignIn = (credentials = {}) => async (dispatch) => {
   try {
-    const user = await axios.post('/auth/signup', userData, {
+    const {
+      data: { token },
+    } = await authApi.post('/auth/signin', credentials, {
       withCredentials: true,
     });
+    localStorage.setItem('token', token);
 
-    dispatch(signUp(user));
+    dispatch(trySignIn());
+  } catch (e) {
+    const { response } = e;
+
+    if (response) dispatch(setError(response.data));
+    else dispatch(setError('Error occured'));
+  }
+};
+
+export const startSignUp = (userData = {}) => async (dispatch) => {
+  try {
+    const { data: token } = await authApi.post('/auth/signup', userData, {
+      withCredentials: true,
+    });
+    localStorage.setItem('token', token);
+
+    dispatch(trySignIn());
   } catch (e) {
     const { response } = e;
 
@@ -69,9 +74,7 @@ export const startSignUp = (userData = {}) => async (dispatch) => {
 
 export const startSignOut = () => async (dispatch) => {
   try {
-    await axios.post('/auth/signout', {
-      withCredentials: true,
-    });
+    localStorage.removeItem('token');
     dispatch(signOut());
   } catch (e) {
     dispatch(setError('Nepodarilo sa úspešne odhlásiť'));
