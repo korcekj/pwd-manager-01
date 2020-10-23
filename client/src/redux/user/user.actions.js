@@ -26,7 +26,9 @@ export const clearError = () => ({
 
 export const trySignIn = () => async (dispatch) => {
   try {
-    const user = await axios.get('/auth/me');
+    const user = await axios.get('/auth/me', {
+      withCredentials: true,
+    });
     if (user) dispatch(signIn(user));
   } catch (e) {
     const { response } = e;
@@ -38,7 +40,9 @@ export const trySignIn = () => async (dispatch) => {
 
 export const startSignIn = (credentials = {}) => async (dispatch) => {
   try {
-    const user = await axios.post('/auth/signin', credentials);
+    const user = await axios.post('/auth/signin', credentials, {
+      withCredentials: true,
+    });
     dispatch(signIn(user));
   } catch (e) {
     const { response } = e;
@@ -51,7 +55,9 @@ export const startSignIn = (credentials = {}) => async (dispatch) => {
 
 export const startSignUp = (userData = {}) => async (dispatch) => {
   try {
-    const user = await axios.post('/auth/signup', userData);
+    const user = await axios.post('/auth/signup', userData, {
+      withCredentials: true,
+    });
 
     dispatch(signUp(user));
   } catch (e) {
@@ -64,7 +70,9 @@ export const startSignUp = (userData = {}) => async (dispatch) => {
 
 export const startSignOut = () => async (dispatch) => {
   try {
-    await axios.post('/auth/signout');
+    await axios.post('/auth/signout', {
+      withCredentials: true,
+    });
     dispatch(signOut());
   } catch (e) {
     dispatch(setError('Nepodarilo sa úspešne odhlásiť'));
