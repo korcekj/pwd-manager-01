@@ -1,5 +1,5 @@
 import { userActionTypes } from './user.types';
-import authApi from '../../api/auth';
+import axios from 'axios';
 
 export const signIn = (user = {}) => ({
   type: userActionTypes.SIGN_IN,
@@ -26,7 +26,7 @@ export const clearError = () => ({
 
 export const trySignIn = () => async (dispatch) => {
   try {
-    const { data: user } = await authApi.get('/auth/me', {
+    const { data: user } = await axios.get('/auth/me', {
       withCredentials: true,
     });
     dispatch(signIn(user));
@@ -40,13 +40,9 @@ export const trySignIn = () => async (dispatch) => {
 
 export const startSignIn = (credentials = {}) => async (dispatch) => {
   try {
-    const {
-      data: { token },
-    } = await authApi.post('/auth/signin', credentials, {
+    await axios.post('/auth/signin', credentials, {
       withCredentials: true,
     });
-    localStorage.setItem('token', token);
-
     dispatch(trySignIn());
   } catch (e) {
     const { response } = e;
@@ -58,11 +54,9 @@ export const startSignIn = (credentials = {}) => async (dispatch) => {
 
 export const startSignUp = (userData = {}) => async (dispatch) => {
   try {
-    const { data: token } = await authApi.post('/auth/signup', userData, {
+    const user = await axios.post('/auth/signup', userData, {
       withCredentials: true,
     });
-    localStorage.setItem('token', token);
-
     dispatch(trySignIn());
   } catch (e) {
     const { response } = e;
@@ -74,7 +68,9 @@ export const startSignUp = (userData = {}) => async (dispatch) => {
 
 export const startSignOut = () => async (dispatch) => {
   try {
-    localStorage.removeItem('token');
+    await axios.post('/auth/signout', {
+      withCredentials: true,
+    });
     dispatch(signOut());
   } catch (e) {
     dispatch(setError('Nepodarilo sa úspešne odhlásiť'));

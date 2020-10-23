@@ -18,10 +18,14 @@ router.post('/signup', async (req, res) => {
     const newUser = new User({ name, email, password });
     await newUser.save();
 
-    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_SECRET_EXPIRATION,
-    });
-    return res.send({ token });
+    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET);
+    return res
+      .cookie('token', token, {
+        expires: new Date(Date.now() + process.env.JWT_SECRET_EXPIRATION),
+        secure: false,
+        httpOnly: true,
+      })
+      .send();
   } catch (e) {
     const { errors } = e;
 
@@ -51,13 +55,22 @@ router.post('/signin', async (req, res) => {
 
   try {
     await user.comparePassword(password);
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_SECRET_EXPIRATION,
-    });
-    return res.send({ token });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+    return res
+      .cookie('token', token, {
+        expires: new Date(Date.now() + process.env.JWT_SECRET_EXPIRATION),
+        secure: false,
+        httpOnly: true,
+      })
+      .send();
   } catch (error) {
+    console.log(error);
     return res.status(422).send('Invalid email or password');
   }
+});
+
+router.post('/signout', requireAuth, async (req, res) => {
+  return res.clearCookie('token').send();
 });
 
 router.get('/me', requireAuth, async (req, res) => {
