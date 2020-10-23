@@ -56,7 +56,7 @@ const App = ({ trySignIn, currentUser }) => {
             />
             {/* Domovska stranka pre prihlaseneho pouzivatela */}
             <PrivateRoute
-              path='/user'
+              path='/dashboard'
               isAuth={!!currentUser}
               component={DashboardPage}
             />

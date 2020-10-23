@@ -5,7 +5,7 @@ import { HomePageOverlay, LinkTitle } from './homepage.styles';
 const HomePage = () => {
   return (
     <HomePageOverlay>
-      <LinkTitle to='/signin'>Title of the page</LinkTitle>
+      <LinkTitle to='/signin'>Sign in to manage your account</LinkTitle>
     </HomePageOverlay>
   );
 };

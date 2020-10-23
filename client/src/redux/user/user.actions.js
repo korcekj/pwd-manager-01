@@ -1,6 +1,8 @@
 import { userActionTypes } from './user.types';
 import axios from 'axios';
 
+import { hideMessage } from '../flash-message/flash-message.actions';
+
 export const signIn = (user = {}) => ({
   type: userActionTypes.SIGN_IN,
   payload: user,
@@ -31,10 +33,7 @@ export const trySignIn = () => async (dispatch) => {
     });
     dispatch(signIn(user));
   } catch (e) {
-    const { response } = e;
-
-    if (response) dispatch(setError(response.data));
-    else dispatch(setError('Error occured'));
+    dispatch(signIn(null));
   }
 };
 
@@ -43,7 +42,11 @@ export const startSignIn = (credentials = {}) => async (dispatch) => {
     await axios.post('/auth/signin', credentials, {
       withCredentials: true,
     });
-    dispatch(trySignIn());
+    const { data: user } = await axios.get('/auth/me', {
+      withCredentials: true,
+    });
+    dispatch(signIn(user));
+    dispatch(hideMessage());
   } catch (e) {
     const { response } = e;
 
@@ -54,10 +57,14 @@ export const startSignIn = (credentials = {}) => async (dispatch) => {
 
 export const startSignUp = (userData = {}) => async (dispatch) => {
   try {
-    const user = await axios.post('/auth/signup', userData, {
+    await axios.post('/auth/signup', userData, {
       withCredentials: true,
     });
-    dispatch(trySignIn());
+    const { data: user } = await axios.get('/auth/me', {
+      withCredentials: true,
+    });
+    dispatch(signUp(user));
+    dispatch(hideMessage());
   } catch (e) {
     const { response } = e;
 

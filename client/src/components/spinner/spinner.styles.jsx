@@ -10,7 +10,7 @@ export const SpinnerContainer = styled.div`
   background-color: rgba(208, 232, 240, 0.2);
   border: 3px solid transparent;
   border-radius: 50%;
-  border-top-color: #df5b5b;
+  border-top-color: #00465f;
   animation: spin 1.5s ease-in-out infinite;
 
   &::before {
@@ -22,7 +22,7 @@ export const SpinnerContainer = styled.div`
     height: 40px;
     border: 2px solid transparent;
     border-radius: 50%;
-    border-left-color: #e79d45;
+    border-left-color: #5c99af;
     animation: spin 1s ease-in-out infinite;
   }
 
@@ -33,7 +33,7 @@ export const SpinnerContainer = styled.div`
     height: 20px;
     border: 4px solid transparent;
     border-radius: 50%;
-    border-right-color: #ffda2d;
+    border-right-color: #b1d2de;
     animation: spin 2s ease-in-out infinite;
   }
 

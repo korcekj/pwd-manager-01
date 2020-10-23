@@ -53,14 +53,14 @@ const SignUp = ({ startSignUp, setMessage, clearError, error }) => {
 
   return (
     <SignUpContainer>
-      <Title>Chcem sa zaregistrovať</Title>
+      <Title>I would like to register</Title>
       <form onSubmit={handleSubmit}>
         <FormInput
           type='text'
           name='name'
           value={name}
           onChange={handleChange}
-          label='Meno'
+          label='Your name'
           required
         />
         <FormInput
@@ -76,7 +76,7 @@ const SignUp = ({ startSignUp, setMessage, clearError, error }) => {
           name='password'
           value={password}
           onChange={handleChange}
-          label='Heslo'
+          label='Password'
           required
         />
         <FormInput
@@ -84,10 +84,10 @@ const SignUp = ({ startSignUp, setMessage, clearError, error }) => {
           name='confirmPassword'
           value={confirmPassword}
           onChange={handleChange}
-          label='Zopakuj heslo'
+          label='Confirm password'
           required
         />
-        <CustomButton type='submit'>ZAREGISTROVAŤ</CustomButton>
+        <CustomButton type='submit'>REGISTER</CustomButton>
       </form>
     </SignUpContainer>
   );

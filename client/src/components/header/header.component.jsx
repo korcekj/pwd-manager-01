@@ -6,13 +6,14 @@ import { Link } from 'react-router-dom';
 import { startSignOut } from '../../redux/user/user.actions';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
 
-import { ReactComponent as Logo } from '../../assets/icons/logo-circle.svg';
-
 import {
   HeaderContainer,
+  LogoContainer,
   LogoWrapper,
   NavContainer,
   NavLinkElement,
+  Logo,
+  LogoTitle,
 } from './header.styles';
 
 const Header = ({ currentUser, startSignOut }) => {
@@ -24,21 +25,21 @@ const Header = ({ currentUser, startSignOut }) => {
         return (
           <NavContainer>
             <NavLinkElement to='/' exact activeClassName='active'>
-              Domov
+              Home
             </NavLinkElement>
             <NavLinkElement to='/signin' activeClassName='active'>
-              Prihlásiť
+              Login
             </NavLinkElement>
           </NavContainer>
         );
       default:
         return (
           <NavContainer>
-            <NavLinkElement to='/user' exact activeClassName='active'>
-              Domov
+            <NavLinkElement to='/dashboard' exact activeClassName='active'>
+              Home
             </NavLinkElement>
             <NavLinkElement as='div' to='' onClick={startSignOut}>
-              Odhlásiť
+              Logout
             </NavLinkElement>
           </NavContainer>
         );
@@ -47,11 +48,16 @@ const Header = ({ currentUser, startSignOut }) => {
 
   return (
     <HeaderContainer>
-      <LogoWrapper>
+      <LogoContainer>
+        <LogoWrapper>
+          <Link to='/'>
+            <Logo />
+          </Link>
+        </LogoWrapper>
         <Link to='/'>
-          <Logo />
+          <LogoTitle>Pwd | Manager</LogoTitle>
         </Link>
-      </LogoWrapper>
+      </LogoContainer>
       {renderActionButtons()}
     </HeaderContainer>
   );

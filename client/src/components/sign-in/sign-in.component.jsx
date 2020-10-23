@@ -40,7 +40,7 @@ const SignIn = ({ startSignIn, setMessage, clearError, error }) => {
 
   return (
     <SignInContainer>
-      <Title>Už mám účet vytvorený</Title>
+      <Title>I have already an account</Title>
       <form onSubmit={handleSubmit}>
         <FormInput
           name='email'
@@ -54,13 +54,13 @@ const SignIn = ({ startSignIn, setMessage, clearError, error }) => {
           name='password'
           type='password'
           value={password}
-          label='Heslo'
+          label='Password'
           handleChange={handleChange}
           required
         />
 
         <ButtonsContainer>
-          <CustomButton type='submit'>PRIHLÁSIŤ</CustomButton>
+          <CustomButton type='submit'>LOGIN</CustomButton>
         </ButtonsContainer>
       </form>
     </SignInContainer>

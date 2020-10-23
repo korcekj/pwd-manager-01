@@ -21,7 +21,9 @@ router.post('/signup', async (req, res) => {
     const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET);
     return res
       .cookie('token', token, {
-        expires: new Date(Date.now() + Number(process.env.JWT_SECRET_MAX_AGE)),
+        expires: new Date(
+          Date.now() + Number(process.env.JWT_SECRET_EXPIRATION)
+        ),
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
       })
@@ -58,13 +60,14 @@ router.post('/signin', async (req, res) => {
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
     return res
       .cookie('token', token, {
-        expires: new Date(Date.now() + Number(process.env.JWT_SECRET_MAX_AGE)),
+        expires: new Date(
+          Date.now() + Number(process.env.JWT_SECRET_EXPIRATION)
+        ),
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
       })
       .send();
   } catch (error) {
-    console.log(error);
     return res.status(422).send('Invalid email or password');
   }
 });
@@ -77,7 +80,7 @@ router.get('/me', requireAuth, async (req, res) => {
   const { _id } = req.user;
 
   try {
-    const user = await User.find({ _id }).select({
+    const user = await User.findOne({ _id }).select({
       name: 1,
       email: 1,
       createdAt: 1,
