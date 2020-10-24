@@ -22,6 +22,7 @@ export const CardContainer = styled.div`
   border: 1px solid #b1d2de;
   border-radius: 6px;
   padding: 1em 1.5em;
+  height: fit-content;
 `;
 
 export const CardTitle = styled.h3`
@@ -46,6 +47,8 @@ export const CardList = styled.ul`
   list-style-type: none;
   padding: 0;
   margin: 0.5em 0;
+  max-height: 450px;
+  overflow-y: auto;
 `;
 
 export const CardListItem = styled.li`

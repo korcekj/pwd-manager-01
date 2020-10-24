@@ -8,11 +8,20 @@ import CustomButton from '../custom-button/custom-button.component';
 import { selectError } from '../../redux/user/user.selectors';
 
 import { startSignIn, clearError } from '../../redux/user/user.actions';
-import { setMessage } from '../../redux/flash-message/flash-message.actions';
+import {
+  setMessage,
+  hideMessage,
+} from '../../redux/flash-message/flash-message.actions';
 
 import { SignInContainer, ButtonsContainer, Title } from './sign-in.styles';
 
-const SignIn = ({ startSignIn, setMessage, clearError, error }) => {
+const SignIn = ({
+  startSignIn,
+  setMessage,
+  clearError,
+  hideMessage,
+  error,
+}) => {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const { email, password } = credentials;
 
@@ -28,6 +37,7 @@ const SignIn = ({ startSignIn, setMessage, clearError, error }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    hideMessage();
 
     startSignIn(email, password);
   };
@@ -70,6 +80,7 @@ const SignIn = ({ startSignIn, setMessage, clearError, error }) => {
 const mapDispatchToProps = (dispatch) => ({
   startSignIn: (email, password) => dispatch(startSignIn({ email, password })),
   clearError: () => dispatch(clearError()),
+  hideMessage: () => dispatch(hideMessage()),
   setMessage: (data) => dispatch(setMessage(data)),
 });
 

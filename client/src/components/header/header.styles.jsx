@@ -1,7 +1,25 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
 import { ReactComponent as LogoIcon } from '../../assets/icons/logo-circle.svg';
+
+const spinnerStyle = css`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border: 3px solid rgba(0, 75, 95, 0.4);
+  border-top-color: #001c26;
+  border-radius: 50%;
+  animation: spin 1s infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
 
 export const HeaderContainer = styled.header`
   display: flex;
@@ -26,6 +44,11 @@ export const LogoWrapper = styled.div`
   width: 60px;
   height: 60px;
   margin-right: 1.5em;
+  position: relative;
+`;
+
+export const LogoLoadingSpinner = styled.div`
+  ${({ loading }) => (loading ? spinnerStyle : '')}
 `;
 
 export const Logo = styled(LogoIcon)`

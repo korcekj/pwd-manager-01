@@ -16,6 +16,7 @@ import {
 } from './dashboard.styles';
 
 const Dashboard = ({ currentUser }) => {
+  const { name, email, createdAt, logs } = currentUser;
   return (
     <DashboardContainer>
       <ContainerGrid>
@@ -24,24 +25,36 @@ const Dashboard = ({ currentUser }) => {
           <CardList>
             <CardListItem>
               <CardListItemValue bold>Your name:</CardListItemValue>
-              <CardListItemValue>{currentUser.name}</CardListItemValue>
+              <CardListItemValue>{name}</CardListItemValue>
             </CardListItem>
             <CardListItem>
               <CardListItemValue bold>Your e-mail:</CardListItemValue>
-              <CardListItemValue>{currentUser.email}</CardListItemValue>
+              <CardListItemValue>{email}</CardListItemValue>
             </CardListItem>
             <CardListItem>
               <CardListItemValue bold>
                 Date of your registration:
               </CardListItemValue>
               <CardListItemValue>
-                {moment(currentUser.createdAt).format('MMMM DD, YYYY')}
+                {moment(createdAt).format('MMMM DD, YYYY')}
               </CardListItemValue>
             </CardListItem>
           </CardList>
         </CardContainer>
         <CardContainer>
           <CardTitle>User logs</CardTitle>
+          <CardList>
+            {logs.map((log, index) => (
+              <CardListItem key={log}>
+                <CardListItemValue bold>
+                  #{logs.length - index}
+                </CardListItemValue>
+                <CardListItemValue>
+                  {moment(log).format('MMMM DD, YYYY HH:mm:ss')}
+                </CardListItemValue>
+              </CardListItem>
+            ))}
+          </CardList>
         </CardContainer>
       </ContainerGrid>
     </DashboardContainer>

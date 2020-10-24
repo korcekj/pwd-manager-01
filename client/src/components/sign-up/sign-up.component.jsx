@@ -7,11 +7,20 @@ import CustomButton from '../custom-button/custom-button.component';
 
 import { selectError } from '../../redux/user/user.selectors';
 import { startSignUp, clearError } from '../../redux/user/user.actions';
-import { setMessage } from '../../redux/flash-message/flash-message.actions';
+import {
+  setMessage,
+  hideMessage,
+} from '../../redux/flash-message/flash-message.actions';
 
 import { SignUpContainer, Title } from './sign-up-styles';
 
-const SignUp = ({ startSignUp, setMessage, clearError, error }) => {
+const SignUp = ({
+  startSignUp,
+  setMessage,
+  clearError,
+  hideMessage,
+  error,
+}) => {
   const [credentials, setCredentials] = useState({
     name: '',
     email: '',
@@ -33,10 +42,11 @@ const SignUp = ({ startSignUp, setMessage, clearError, error }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    hideMessage();
 
     if (password !== confirmPassword) {
       setMessage({
-        message: 'Heslá sa nezhodujú',
+        message: 'Password do not match',
         type: 'error',
       });
       return;
@@ -97,6 +107,7 @@ const mapDispatchToProps = (dispatch) => ({
   startSignUp: (name, email, password) =>
     dispatch(startSignUp({ name, email, password })),
   clearError: () => dispatch(clearError()),
+  hideMessage: () => dispatch(hideMessage()),
   setMessage: (data) => dispatch(setMessage(data)),
 });
 

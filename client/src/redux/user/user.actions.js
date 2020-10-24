@@ -26,6 +26,11 @@ export const clearError = () => ({
   type: userActionTypes.CLEAR_ERROR,
 });
 
+export const setLoading = (isLoading) => ({
+  type: userActionTypes.LOADING,
+  payload: isLoading,
+});
+
 export const trySignIn = () => async (dispatch) => {
   try {
     const { data: user } = await axios.get('/auth/me', {
@@ -39,6 +44,7 @@ export const trySignIn = () => async (dispatch) => {
 
 export const startSignIn = (credentials = {}) => async (dispatch) => {
   try {
+    dispatch(setLoading(true));
     await axios.post('/auth/signin', credentials, {
       withCredentials: true,
     });
@@ -51,12 +57,15 @@ export const startSignIn = (credentials = {}) => async (dispatch) => {
     const { response } = e;
 
     if (response) dispatch(setError(response.data));
-    else dispatch(setError('Error occured'));
+    else dispatch(setError('Error occured during sign in process'));
+  } finally {
+    dispatch(setLoading(false));
   }
 };
 
 export const startSignUp = (userData = {}) => async (dispatch) => {
   try {
+    dispatch(setLoading(true));
     await axios.post('/auth/signup', userData, {
       withCredentials: true,
     });
@@ -69,17 +78,22 @@ export const startSignUp = (userData = {}) => async (dispatch) => {
     const { response } = e;
 
     if (response) dispatch(setError(response.data));
-    else dispatch(setError('Error occured'));
+    else dispatch(setError('Error occured during sign up process'));
+  } finally {
+    dispatch(setLoading(false));
   }
 };
 
 export const startSignOut = () => async (dispatch) => {
   try {
+    dispatch(setLoading(true));
     await axios.post('/auth/signout', {
       withCredentials: true,
     });
     dispatch(signOut());
   } catch (e) {
-    dispatch(setError('Nepodarilo sa úspešne odhlásiť'));
+    dispatch(setError('Error occured during sign out process'));
+  } finally {
+    dispatch(setLoading(false));
   }
 };

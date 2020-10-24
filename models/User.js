@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -28,6 +28,13 @@ const userSchema = new mongoose.Schema({
       validator: (v) => v.length >= 8,
     },
   },
+  salt: {
+    type: String,
+  },
+  iterations: {
+    type: Number,
+  },
+  logs: [{ type: Date }],
   createdAt: {
     type: Date,
     default: Date.now,
@@ -40,15 +47,16 @@ userSchema.pre('save', function (next) {
     next();
   }
 
-  bcrypt.genSalt(10, (error, salt) => {
-    if (error) return next(error);
+  const salt = crypto.randomBytes(128).toString('base64');
+  const iterations = 100000;
+  crypto.pbkdf2(user.password, salt, iterations, 64, 'sha512', (err, hash) => {
+    if (err) return next(error);
+    hash = hash.toString('base64');
 
-    bcrypt.hash(user.password, salt, (error, hash) => {
-      if (error) return next(error);
-
-      user.password = hash;
-      next();
-    });
+    user.password = hash;
+    user.salt = salt;
+    user.iterations = iterations;
+    next();
   });
 });
 
@@ -56,11 +64,19 @@ userSchema.methods.comparePassword = function (passwordToCompare) {
   const user = this;
 
   return new Promise((resolve, reject) => {
-    bcrypt.compare(passwordToCompare, user.password, (error, isMatch) => {
-      if (error) return reject(error);
-      if (!isMatch) return reject(false);
-      return resolve(true);
-    });
+    crypto.pbkdf2(
+      passwordToCompare,
+      user.salt,
+      user.iterations,
+      64,
+      'sha512',
+      (error, hash) => {
+        if (error) return reject(error);
+        const isMatch = user.password === hash.toString('base64');
+        if (!isMatch) return reject(false);
+        return resolve(true);
+      }
+    );
   });
 };
 

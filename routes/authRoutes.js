@@ -16,6 +16,7 @@ router.post('/signup', async (req, res) => {
 
   try {
     const newUser = new User({ name, email, password });
+    newUser.logs.unshift(new Date().toISOString());
     await newUser.save();
 
     const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET);
@@ -27,7 +28,7 @@ router.post('/signup', async (req, res) => {
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
       })
-      .send();
+      .send('Registered successfully');
   } catch (e) {
     const { errors } = e;
 
@@ -57,6 +58,8 @@ router.post('/signin', async (req, res) => {
 
   try {
     await user.comparePassword(password);
+    user.logs.unshift(new Date().toISOString());
+    await user.save();
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
     return res
       .cookie('token', token, {
@@ -66,7 +69,7 @@ router.post('/signin', async (req, res) => {
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
       })
-      .send();
+      .send('Logged in successfully');
   } catch (error) {
     return res.status(422).send('Invalid email or password');
   }
@@ -84,6 +87,7 @@ router.get('/me', requireAuth, async (req, res) => {
       name: 1,
       email: 1,
       createdAt: 1,
+      logs: 1,
     });
     res.send(user);
   } catch (error) {

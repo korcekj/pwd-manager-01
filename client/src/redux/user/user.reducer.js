@@ -3,6 +3,7 @@ import { userActionTypes } from './user.types';
 const INITIAL_STATE = {
   user: undefined,
   error: null,
+  isLoading: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -16,6 +17,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, user: null, error: action.payload };
     case userActionTypes.CLEAR_ERROR:
       return { ...state, error: null };
+    case userActionTypes.LOADING:
+      return { ...state, isLoading: action.payload };
     default:
       return state;
   }

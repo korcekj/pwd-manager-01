@@ -4,7 +4,10 @@ import { createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 
 import { startSignOut } from '../../redux/user/user.actions';
-import { selectCurrentUser } from '../../redux/user/user.selectors';
+import {
+  selectCurrentUser,
+  selectIsLoading,
+} from '../../redux/user/user.selectors';
 
 import {
   HeaderContainer,
@@ -14,9 +17,10 @@ import {
   NavLinkElement,
   Logo,
   LogoTitle,
+  LogoLoadingSpinner,
 } from './header.styles';
 
-const Header = ({ currentUser, startSignOut }) => {
+const Header = ({ currentUser, isLoading, startSignOut }) => {
   const renderActionButtons = () => {
     switch (currentUser) {
       case undefined:
@@ -35,7 +39,7 @@ const Header = ({ currentUser, startSignOut }) => {
       default:
         return (
           <NavContainer>
-            <NavLinkElement to='/dashboard' exact activeClassName='active'>
+            <NavLinkElement to='/user' exact activeClassName='active'>
               Home
             </NavLinkElement>
             <NavLinkElement as='div' to='' onClick={startSignOut}>
@@ -53,6 +57,7 @@ const Header = ({ currentUser, startSignOut }) => {
           <Link to='/'>
             <Logo />
           </Link>
+          <LogoLoadingSpinner loading={isLoading} />
         </LogoWrapper>
         <Link to='/'>
           <LogoTitle>Pwd | Manager</LogoTitle>
@@ -65,6 +70,7 @@ const Header = ({ currentUser, startSignOut }) => {
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
+  isLoading: selectIsLoading,
 });
 
 const mapDispatchToProps = (dispatch) => ({
