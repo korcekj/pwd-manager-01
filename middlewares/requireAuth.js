@@ -1,10 +1,12 @@
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
-// Mongoose models
+// Mongoose User model
 const User = mongoose.model('User');
 
+// Middleware, ktory kontroluje, ci je pouzivatel prihlaseny alebo nie
 module.exports = (req, res, next) => {
+  // Ziskanie JWT tokenu z cookies
   const { token } = req.cookies;
 
   if (!token) return res.status(401).send('Authentification failed');

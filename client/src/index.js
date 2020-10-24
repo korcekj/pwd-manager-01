@@ -10,7 +10,7 @@ import App from './App';
 
 import * as serviceWorker from './serviceWorker';
 
-// disable react-dev-tools for this project
+// Disable react-dev-tools for production environment
 if (
   process.env.NODE_ENV === 'production' &&
   typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ === 'object'

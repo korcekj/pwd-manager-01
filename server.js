@@ -1,6 +1,9 @@
 // Mongoose modely
 require('./models/User');
 
+// Premenne prostredia pocas dostupne developmentu
+require('dotenv').config();
+
 // Importovanie potrebnych packages
 const express = require('express');
 const mongoose = require('mongoose');
@@ -11,12 +14,12 @@ const path = require('path');
 const compression = require('compression');
 const enforce = require('express-sslify');
 
-// Pripojenie k MONGODB databaze
-require('dotenv').config();
+// Prihlasovacie udaje do MongoDB databazy
 const mongodbUser = process.env.MONGODB_USER;
 const mongodbPassword = process.env.MONGODB_PASSWORD;
 const mongodbDatabase = process.env.MONGODB_DATABASE;
 
+// Definovanie pripojenia k MongoDB databaze
 const mongoUri = `mongodb+srv://${mongodbUser}:${mongodbPassword}@cluster0-qwrjd.mongodb.net/${mongodbDatabase}?retryWrites=true&w=majority`;
 mongoose.connect(mongoUri, {
   useNewUrlParser: true,
@@ -25,6 +28,7 @@ mongoose.connect(mongoUri, {
   useFindAndModify: false,
 });
 
+// Vytvorenie spojenia
 mongoose.connection.on('connected', () => {
   console.log('Connected to mongoDB instance.');
 });
@@ -41,6 +45,7 @@ const port = process.env.PORT || 5000;
 // Routes
 const authRoutes = require('./routes/authRoutes');
 
+// Middlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ origin: true, credentials: true }));
